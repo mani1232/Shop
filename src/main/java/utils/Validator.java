@@ -43,26 +43,19 @@ public class Validator {
 
     // Валидация ввода цены
     public static double validatePriceInput(Scanner scanner) {
-
-        double price;
-        String str1 = null;
-
-        while (!scanner.hasNextDouble()) {
-            String str = scanner.nextLine().trim();
-            System.out.printf(Constants.NAN_PRICE_MSG, str);
-        }
-        price = scanner.nextDouble();
-        while (price <= 0) {
-            System.out.print(Constants.INCORRECT_PRICE_MSG);
-            while (!scanner.hasNextDouble()) {
-                try {
-                    str1 = scanner.nextLine().trim();
-                } catch (InputMismatchException ime) {
-                    System.out.printf(Constants.NAN_PRICE_MSG, str1);
-                }
+        do {
+            String price = scanner.nextLine().trim();
+            try {
+                double priceNum = Double.parseDouble(price);
+                if (priceNum <= 0)
+                    throw new CustomException(Constants.INCORRECT_PRICE_MSG);
+                return priceNum;
+            } catch (CustomException e) {
+                e.printStackTrace();
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                System.out.printf(Constants.NAN_PRICE_MSG, price);
             }
-            price = scanner.nextDouble();
-        }
-        return price;
+        } while (true);
     }
 }
