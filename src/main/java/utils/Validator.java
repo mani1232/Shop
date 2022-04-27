@@ -11,16 +11,16 @@ public class Validator {
 
     // Валидация ввода имени
     public static String validateName(Scanner scanner) {
-        String str = scanner.nextLine().trim();
-        try {
-            if (str.isEmpty())
-                throw new CustomException(Constants.EMPTY_NAME_MSG);
-            return str;
-        } catch (CustomException e) {
-            e.printStackTrace();
-            validateName(scanner);
-        }
-        return "Error #1";
+        do {
+            String str = scanner.nextLine().trim();
+            try {
+                if (str.isEmpty())
+                    throw new CustomException(Constants.EMPTY_NAME_MSG);
+                return str;
+            } catch (CustomException e) {
+                e.printStackTrace();
+            }
+        } while (true);
     }
 
     // Валидация ввода количества
