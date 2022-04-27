@@ -1,7 +1,8 @@
 package utils;
 
-import exceptions.EmptyException;
+import exceptions.CustomException;
 
+import java.util.Arrays;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -13,10 +14,10 @@ public class Validator {
         String str = scanner.nextLine().trim();
         try {
             if (str.isEmpty())
-                throw new EmptyException(str);
+                throw new CustomException(Constants.EMPTY_NAME_MSG);
             return str;
-        } catch (EmptyException e) {
-            System.out.println("Exception: " + e);
+        } catch (CustomException e) {
+            e.printStackTrace();
             validateName(scanner);
         }
         return "Error #1";
@@ -24,27 +25,20 @@ public class Validator {
 
     // Валидация ввода количества
     public static int validateQuantityInput(Scanner scanner) {
-
-        int quantity;
-        String str1 = null;
-
-        while (!scanner.hasNextInt()) {
-            String str = scanner.nextLine().trim();
-            System.out.printf(Constants.NAN_QUANTITY_MSG, str);
-        }
-        quantity = scanner.nextInt();
-        while (quantity <= 0) {
-            System.out.println(Constants.INCORRECT_QUANTITY_MSG);
-            while (!scanner.hasNextInt()) {
-                try {
-                    str1 = scanner.next().trim();
-                } catch (InputMismatchException ime) {
-                    System.out.printf(Constants.NAN_QUANTITY_MSG, str1);
-                }
+        do {
+            String quantity = scanner.nextLine().trim();
+            try {
+                int quantityNum = Integer.parseInt(quantity);
+                if (quantityNum <= 0)
+                    throw new CustomException(Constants.INCORRECT_QUANTITY_MSG);
+                return quantityNum;
+            } catch (CustomException e) {
+                e.printStackTrace();
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                System.out.printf(Constants.NAN_QUANTITY_MSG, quantity);
             }
-            quantity = scanner.nextInt();
-        }
-        return quantity;
+        } while (true);
     }
 
     // Валидация ввода цены
