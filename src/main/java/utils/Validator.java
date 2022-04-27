@@ -1,5 +1,7 @@
 package utils;
 
+import exceptions.EmptyException;
+
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -9,11 +11,15 @@ public class Validator {
     // Валидация ввода имени
     public static String validateName(Scanner scanner) {
         String str = scanner.nextLine().trim();
-        while (str.isEmpty()) {
-            System.out.print(Constants.EMPTY_NAME_MSG);
-            str = scanner.nextLine().trim();
+        try {
+            if (str.isEmpty())
+                throw new EmptyException(str);
+            return str;
+        } catch (EmptyException e) {
+            System.out.println("Exception: " + e);
+            validateName(scanner);
         }
-        return str;
+        return "Error #1";
     }
 
     // Валидация ввода количества
